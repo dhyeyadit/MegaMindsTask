@@ -1,0 +1,34 @@
+<div class="container mt-3">
+  <h4>Summary View</h4>
+
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Sampling Time</th>
+        <th>Project Name</th>
+        <th>Construction Count</th>
+        <th>Is Construction Completed</th>
+        <th>Length of Road</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for(row of summaryData(); track $index){
+      <tr>
+        <td>{{ row.samplingTime |date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+        <td>{{ row.projectName || "-" }}</td>
+        <td>{{ row.constructionCount ?? "-" }}</td>
+        <td>
+          {{
+            row.isConstructionCompleted === true
+              ? "Yes"
+              : row.isConstructionCompleted === false
+              ? "No"
+              : "-"
+          }}
+        </td>
+        <td>{{ row.lengthOfRoad ?? "-" }}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+</div>

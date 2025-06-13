@@ -1,0 +1,66 @@
+<div class="container mt-3 border p-3 d-flex">
+    <!-- Left: List -->
+    <div class="w-25 border-end pe-2">
+      @for (item of data; track item; let i = $index) {
+        <button
+          class="btn w-100 mb-2"
+          [class.btn-dark]="i === selectedIndex"
+          [class.btn-outline-dark]="i !== selectedIndex"
+          (click)="select(i)"
+        >
+          {{ item.SamplingTime | date: 'dd-MM-yyyy hh:mm:ss a' }}
+        </button>
+      }
+      @empty {
+        <p>No data available.</p>
+      }
+    </div>
+  
+    <!-- Right: Dynamic Form -->
+    <div class="flex-grow-1 ps-3">
+      @if (form) {
+        <form [formGroup]="form">
+          @for (prop of data[selectedIndex]?.Properties; track prop.Label) {
+            <div class="mb-2">
+              <label [for]="getControlName(prop.Label)">{{ prop.Label }}:</label>
+  
+              @if (typeof form.get(getControlName(prop.Label))?.value === 'boolean') {
+                <div class="form-check">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    [id]="getControlName(prop.Label)"
+                    [formControlName]="getControlName(prop.Label)"
+                  />
+                </div>
+              } @else if (typeof form.get(getControlName(prop.Label))?.value === 'number') {
+                <div class="input-group">
+                  <input
+                    type="number"
+                    class="form-control"
+                    [id]="getControlName(prop.Label)"
+                    [formControlName]="getControlName(prop.Label)"
+                  />
+                  @if (isLengthField(prop.Label)) {
+                    <span class="input-group-text">KM</span>
+                  }
+                </div>
+              } @else {
+                <input
+                  type="text"
+                  class="form-control"
+                  [id]="getControlName(prop.Label)"
+                  [formControlName]="getControlName(prop.Label)"
+                />
+              }
+            </div>
+          }
+  
+          <button type="button" class="btn btn-dark mt-2" (click)="save()">Save</button>
+        </form>
+      } @else {
+        <p>Select an item to view details.</p>
+      }
+    </div>
+  </div>
+  
